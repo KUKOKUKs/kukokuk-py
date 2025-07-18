@@ -15,8 +15,8 @@ def convert_hwp_to_hwpx(hwp_path) -> str:
     # 한글 프로그램을 파이썬에서 제어할 수 있도록 연결 (한글 객체 생성)
     hwp = win32com.client.Dispatch("HWPFrame.HwpObject")
 
-    # 보안 모듈 등록 (이거 없으면 저장 시 오류 발생 가능)
-    hwp.RegisterModule("FilePathCheckDLL", "FilePathCheckerModule")  # 보안팝업 자동클릭
+    # 보안 모듈 등록 (서버 환경에 레지스트리 등록 필수 - README 참고)
+    hwp.RegisterModule("FilePathCheckDLL", "SecurityModule")  # 보안팝업 자동클릭
 
     # 출력 파일 전체 경로 구성 (예: C:/downloads/hwp_files/sample.hwpx)
     output_path = os.path.join(CONVERTED_HWPX_DIR, os.path.basename(hwp_path).replace('.hwp', '.hwpx'))

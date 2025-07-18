@@ -15,3 +15,5 @@ DOWNLOAD_DIR = os.path.join(BASE_DIR, "downloads") # 'C:\\pyserver\\downloads'
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)  # 다운로드 디렉토리가 없으면 생성
 
 CONVERTED_HWPX_DIR = os.path.join(DOWNLOAD_DIR, "hwp_files")  # 변환된 HWPX 파일을 저장할 디렉토리
+
+os.makedirs(CONVERTED_HWPX_DIR, exist_ok=True)  # 변환된 HWPX 디렉토리가 없으면 생성
