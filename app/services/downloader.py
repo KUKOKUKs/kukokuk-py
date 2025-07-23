@@ -1,5 +1,6 @@
 # hwp 다운호드 후 경로 반환 
 # selenium의 webdriver를 사용하기 위한 import
+import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -14,8 +15,9 @@ from app.config import DOWNLOAD_DIR
 
 # 에듀넷 url 페이지에서 HWP 파일을 다운로드하는 함수
 # :param file_url: 에듀넷에서 HWP를 제공하는 페이지의 URL
-# :return: 다운로드된 HWP 파일의 경로
-def download_hwp_from_edunet(file_url: str) -> str:
+# :return: 응답을 반환할때 필요한 정보를 담은 dict 
+# {"path": path, "school": school, "grade": grade, "title": title, "keywords": keywords }
+def download_hwp_from_edunet(file_url: str) -> dict:
 
     # Chrome 옵션에서 다운로드 경로 설정 
     options = webdriver.ChromeOptions()
@@ -35,6 +37,28 @@ def download_hwp_from_edunet(file_url: str) -> str:
 
     # pdf 엘리먼트 찾기
     hwp_element = driver.find_element(By.CSS_SELECTOR, '.add_btn_view .btn_hwp+a')
+    # school 정보 추출
+    school = driver.find_element(By.CSS_SELECTOR, '.filter_container .flex_between .tab_filter_container button.active').text
+    if (school == "초등학교") : school = "초" # 초로 통일
+    elif (school == "중학교") : school = "중" # 중으로 통일
+    # 선택된 grade 정보 추출 - radio 버튼에서 선택된 값 가져오기
+    grade_radio = driver.find_element(By.CSS_SELECTOR, "input[type='radio'][name='searchContsClsfId']:checked")
+    # 선택된 radio의 id를 이용해 이 radio에 연결된 label 엘리먼트를 찾아서 텍스트 저장
+    grade_radio_id = grade_radio.get_attribute("id")
+    grade_all = driver.find_element(By.CSS_SELECTOR, f"label[for='{grade_radio_id}']").text
+    # 정규표현식으로 grade에서 숫자만 추출
+    grade = int(re.findall(r'\d+', grade_all)[0])  # 숫자만 추출 (리스트 형태로 반환되므로 [0]으로 첫번째 요소 선택)
+    # 학습자료의 제목 추출
+    title = driver.find_element(By.CSS_SELECTOR, '.title_txt strong').text
+    # 학습자료의 키워드 추출
+    keyword_elements = driver.find_elements(By.CSS_SELECTOR, '.board_view_desc dd a')
+    keywords = [element.text for element in keyword_elements]
+    
+
+    print("school : " + school)  # 현재 선택된 학교 이름 출력
+    print("grade : " + str(grade))  # 현재 선택된 학년 출력
+    print("title : " + title)  # 현재 선택된 학습자료 제목 출력
+    print("keywords : " + ", ".join(keywords))  # 현재 선택된 학습자료 키워드 출력
 
     # PDF 다운로드 전 downloads 폴더의 파일 목록 저장
     before = set(os.listdir(DOWNLOAD_DIR))
@@ -45,7 +69,14 @@ def download_hwp_from_edunet(file_url: str) -> str:
     # 다운로드가 완료될 때까지 기다린 후, 새로 다운로드된 hwp 파일의 경로를 반환
     path = wait_for_new_hwp(DOWNLOAD_DIR, before)
 
-    return path
+    # 보통 파이썬에선 간단한 DTO는 dict로 처리
+    return {
+        "path": path,  # 다운로드된 HWP 파일의 경로
+        "school": school,
+        "grade": grade,
+        "title": title,
+        "keywords": keywords
+    }
 
 # hwp 파일이 다운로드될 때까지 기다렸다가, 새로 다운로드된 hwp 파일의 경로를 반환하는 함수
 # :param download_dir: 다운로드 디렉토리 경로

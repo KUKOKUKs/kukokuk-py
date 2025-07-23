@@ -93,7 +93,7 @@ def extract_blocks_from_hwpx(hwpx_path) -> list:
                             blocks.append({
                                 "type": block_type, 
                                 "content": paragraph_text.strip(),
-                                "title_style" : title_style
+                                "title_style" : dict(title_style) # _Attrib는 JSON 직렬화가 불가능하므로, dict로 변환해서 저장 
                             })
                         # 만약 문단의 타입이 paragraph면
                         elif block_type == "paragraph":
@@ -104,7 +104,7 @@ def extract_blocks_from_hwpx(hwpx_path) -> list:
                                 # p 안에서 t를 감싼 run태그를 찾아 현재 문단의 스타일 저장 
                                 for run in elem.iter(f"{{{ns['hp']}}}run"):
                                     for trun in run.iter(f"{{{ns['hp']}}}t"): ### 수정 해보자 
-                                        curr_style = run.attrib
+                                        curr_style = dict(run.attrib)
                                 # 현재 문단의 스타일이 앞 제목 문단의 스타일과 같으면
                                 if curr_style and "charPrIDRef" in curr_style and "charPrIDRef" in prev_style:
                                     if curr_style["charPrIDRef"] == prev_style["charPrIDRef"]:

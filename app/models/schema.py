@@ -5,5 +5,5 @@ from pydantic import BaseModel
 # Pydantic은 데이터 검증 라이브러리로, 입력데이터를 자동으로 검증하고 변환해준다 
 
 class parseMaterialsRequest(BaseModel):
-    file_url : str
+    url : str
 
