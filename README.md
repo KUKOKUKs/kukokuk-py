@@ -53,9 +53,9 @@ regsvr32 "C:\경로\HncShellExt2.dll"
 ⚠️ 이 작업은 사용자 PC마다 한 번씩 필요합니다. 자동화된 테스트나 GitHub 액션에서는 사용할 수 없습니다.
 
 ### 3。 서버 실행하기 
-···bash
+```bash
  uvicorn app.main:app --reload       
-···
+```
 
 ## 📡 API 명세
 POST /edunet/parse-materials
