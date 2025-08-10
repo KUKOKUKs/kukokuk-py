@@ -39,8 +39,8 @@ def download_hwp_from_edunet(file_url: str) -> dict:
     hwp_element = driver.find_element(By.CSS_SELECTOR, '.add_btn_view .btn_hwp+a')
     # school 정보 추출
     school = driver.find_element(By.CSS_SELECTOR, '.filter_container .flex_between .tab_filter_container button.active').text
-    if (school == "초등학교") : school = "초" # 초로 통일
-    elif (school == "중학교") : school = "중" # 중으로 통일
+    if (school == "초등학교") : school = "초등" # 초로 통일
+    elif (school == "중학교") : school = "중등" # 중으로 통일
     # 선택된 grade 정보 추출 - radio 버튼에서 선택된 값 가져오기
     grade_radio = driver.find_element(By.CSS_SELECTOR, "input[type='radio'][name='searchContsClsfId']:checked")
     # 선택된 radio의 id를 이용해 이 radio에 연결된 label 엘리먼트를 찾아서 텍스트 저장
