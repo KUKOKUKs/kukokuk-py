@@ -11,6 +11,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 import os
 
+import requests
+
 from app.config import DOWNLOAD_DIR
 
 # 에듀넷 url 페이지에서 HWP 파일을 다운로드하는 함수
@@ -99,3 +101,31 @@ def wait_for_new_hwp(download_dir, before_files, timeout=15) -> str:
         time.sleep(1)
      # 15초내에 파일이 안생기면 에러 발생 
     raise TimeoutError("hwp 다운로드가 완료되지 않았습니다.")
+
+
+# 교사의 그룹 자료 업로드에서, NHN Object Storage(S3)에 저장된 파일을 가져오는 메소드 
+def download_from_object_storage(file_url, material_no):
+    """
+    NHN Object Storage에서 파일 다운로드
+    파일 확장자는 URL에서 추출해서 유지함 (hwp, hwpx 구분)
+    """
+
+     # file_url에서 확장자 추출 (.hwp or .hwpx) - 파일 경로(또는 URL)를 이름과 확장자로 분리
+    ext = os.path.splitext(file_url)[1]  # ".hwp" 또는 ".hwpx" 반환
+    
+     # ✅ 안전한 로컬 경로 (Windows에서도 작동) - \pyserver\downloads
+    download_dir = os.path.join(os.getcwd(), "downloads")
+    os.makedirs(download_dir, exist_ok=True)  # 폴더 없으면 생성
+
+     # 로컬 경로 (material_n 기반 + 확장자 그대로)
+    local_path = os.path.join(download_dir, f"{material_no}{ext}")
+
+    # 파일 다운로드
+    response = requests.get(file_url, stream=True)  # 스트리밍 다운로드
+    response.raise_for_status()  # 실패 시 예외 발생
+
+    with open(local_path, "wb") as f:  # local_path 경로에 파일을 '쓰기 모드(wb: write binary)'로 열기
+        for chunk in response.iter_content(chunk_size=8192):  # 응답(response)을 8192바이트 단위로 스트리밍 읽기
+            f.write(chunk) # 읽어온 chunk(조각)를 파일에 바로 기록
+            
+    return local_path # 다 쓴 후 최종 저장된 파일 경로 반환
