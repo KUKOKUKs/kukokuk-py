@@ -1,4 +1,8 @@
-
+"""
+🚨 [ARCHIVE NOTICE]
+이 코드는 Windows 전용 HWP 변환 모듈(win32com.client)을 사용하는 구버전 파이프라인입니다.
+현재 운영 환경에서는 HWPX 업로드 기반으로 대체되었습니다.
+"""
 import redis
 import requests
 
@@ -26,7 +30,7 @@ def consume_parse_queue():
     Spring 서버가 더 이상 FastAPI로 요청을 보내지 않고,
     Redis에 job을 push하면 워커가 바로 수행하는 구조.
     """
-    queue_name = os.getenv("REDIS_QUEUE_NAME", "parse:queue:admin")
+    queue_name = os.getenv("REDIS_QUEUE_NAME", "queue:material:admin")
     print(f"Worker 시작: queue={queue_name} 대기 중...")
 
     while True:
