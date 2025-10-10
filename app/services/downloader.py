@@ -13,7 +13,7 @@ import os
 
 import requests
 
-from app.config import DOWNLOAD_DIR
+from config import DOWNLOAD_DIR
 
 # 에듀넷 url 페이지에서 HWP 파일을 다운로드하는 함수
 # :param file_url: 에듀넷에서 HWP를 제공하는 페이지의 URL

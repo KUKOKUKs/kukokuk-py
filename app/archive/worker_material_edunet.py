@@ -10,9 +10,9 @@ import requests
 import json
 import os
 
-from app.services.downloader import download_hwp_from_edunet
-from app.services.converter import convert_hwp_to_hwpx 
-from app.services.parses import extract_blocks_from_hwpx
+from services.downloader import download_hwp_from_edunet
+from services.converter import convert_hwp_to_hwpx 
+from services.parses import extract_blocks_from_hwpx
 
 r = redis.StrictRedis(
     host=os.getenv("REDIS_HOST", "localhost"),  # 환경변수 REDIS_HOST 값 사용, 없으면 기본 localhost

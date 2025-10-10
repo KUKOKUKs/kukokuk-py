@@ -3,7 +3,7 @@ import os # 파일 경로와 폴더 탐색을 위해 사용
 import win32com.client  # 파이썬으로 엑셀 뿐만 아니라 윈도우를 운영체제로 삼는 다른 모든 응용프로그램을 컨트롤할 수 있는 모
 import pythoncom
 
-from app.config import CONVERTED_HWPX_DIR  # 꼭 import 해야 함
+from config import CONVERTED_HWPX_DIR  # 꼭 import 해야 함
 
 
 # hwp파일을 hwpx로 변환하는 함수 

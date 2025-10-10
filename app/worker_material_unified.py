@@ -2,9 +2,11 @@ import redis
 import json
 import requests
 import os
-from app.services.downloader import download_from_object_storage
-from app.services.converter import convert_hwp_to_hwpx 
-from app.services.parses import extract_blocks_from_hwpx
+from services.downloader import download_from_object_storage
+from services.parses import extract_blocks_from_hwpx
+
+# 폴더 존재 보장
+os.makedirs("downloads/hwp_files", exist_ok=True)
 
 r = redis.StrictRedis(
     host=os.getenv("REDIS_HOST", "localhost"),  # 환경변수 REDIS_HOST 값 사용, 없으면 기본 localhost
