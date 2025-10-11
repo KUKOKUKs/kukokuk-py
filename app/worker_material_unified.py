@@ -11,6 +11,7 @@ os.makedirs("downloads/hwp_files", exist_ok=True)
 r = redis.StrictRedis(
     host=os.getenv("REDIS_HOST", "localhost"),  # 환경변수 REDIS_HOST 값 사용, 없으면 기본 localhost
     port=int(os.getenv("REDIS_PORT", 6379)),    # REDIS_PORT 값 사용, 없으면 기본 6379
+    password=os.getenv("REDIS_PASSWORD", None),
     db=0,                                       # Redis DB 번호 (0번 DB 사용)
     decode_responses=True                       # Redis 응답을 바이트가 아닌 문자열(str)로 디코딩
 )
