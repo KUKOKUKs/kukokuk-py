@@ -5,7 +5,6 @@
 
 ## 🗂️ **`/archive/README.md` (기존 코드 기록용)**
 
-```markdown
 # 🗃️ Kukokuk Python Worker Archive
 
 이 폴더에는 과거 버전의 Kukokuk 파이썬 워커 코드가 보관되어 있습니다.
